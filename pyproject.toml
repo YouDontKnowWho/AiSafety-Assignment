@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "part2"
+version = "1.0.0"
+description = "Federated Learning with Flower"
+license = "Apache-2.0"
+
+dependencies = [
+    "flwr[simulation]>=1.11.1",
+    "flwr-datasets[vision]>=0.3.0",
+    "torch==2.2.1",
+    "torchvision==0.17.1",
+    "scikit-learn",
+    "pandas",
+    "matplotlib",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[tool.flwr.app]
+publisher = "StudentF"
+
+[tool.flwr.app.components]
+serverapp = "part2.server_app:app"
+clientapp = "part2.client_app:app"
+
+[tool.flwr.app.config]
+num-server-rounds = 50
+fraction-fit = 1.0
+local-epochs = 1
+
+[tool.flwr.federations]
+default = "local-simulation"
+
+[tool.flwr.federations.local-simulation]
+options.num-supernodes = 5
